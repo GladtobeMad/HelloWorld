@@ -8,30 +8,29 @@ import java.util.Properties;
  */
 public class ProxyConnection {
 
-    HttpURLConnection conn;
+    URLConnection conn;
 
-    public ProxyConnection(String link, String proxy, String port) {
+    public ProxyConnection(String link, String proxyHost, int port, String username, String pass) {
 
         try {
-            URL url = new URL(link);
-            Properties properties = System.getProperties();
-            properties.setProperty("http.proxyHost", proxy);
-            properties.setProperty("http.proxyPort", port);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.connect();
+            Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxyHost, port));
+            Authenticator.setDefault(new Authenticator() {
+                @Override
+                protected PasswordAuthentication getPasswordAuthentication() {
+                    return (new PasswordAuthentication(username, pass.toCharArray()));
+                }
+            });
+            conn = new URL(link).openConnection(proxy);
 
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
     }
 
-    public HttpURLConnection getConnection() {
+    public URLConnection getConnection() {
         return conn;
     }
-
 
 
 }
