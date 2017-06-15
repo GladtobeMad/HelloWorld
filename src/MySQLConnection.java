@@ -30,6 +30,10 @@ public class MySQLConnection {
         return st;
     }
 
+    public Connection getConnection() {
+        return conn;
+    }
+
     public void close() {
         try {
             conn.close();
@@ -37,6 +41,7 @@ public class MySQLConnection {
             e.printStackTrace();
         }
     }
+
 
 
 
