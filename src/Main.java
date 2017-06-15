@@ -42,21 +42,15 @@ public class Main {
                 e.printStackTrace();
             }
 
-            Pattern pat = Pattern.compile("<title>.*</title>");
-            Matcher mat = pat.matcher(html);
-
-
+            Pattern pattern = Pattern.compile("<title>(.*)</title>", Pattern.DOTALL);
+            Matcher mat = pattern.matcher(html);
             if (mat.find()) {
-                String name = html.substring(mat.start()+7, mat.end()-8);
+                String name = mat.group();
                 System.out.println("The name of the website is: " + name);
             } else {
                 System.out.println("The name of the website was not found.");
             }
-
-
-
-
-
+            
         }
 
     }
