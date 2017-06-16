@@ -8,19 +8,21 @@ import java.util.Properties;
  */
 public class ProxyConnection {
 
-    URLConnection conn;
+    HttpURLConnection conn;
 
     public ProxyConnection(String link, String proxyHost, int port, String username, String pass) {
 
         try {
             Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxyHost, port));
+            conn = (HttpURLConnection) new URL(link).openConnection(proxy);
+            conn.addRequestProperty("User-Agent","Mozilla/4.0");
             Authenticator.setDefault(new Authenticator() {
                 @Override
                 protected PasswordAuthentication getPasswordAuthentication() {
                     return (new PasswordAuthentication(username, pass.toCharArray()));
                 }
             });
-            conn = new URL(link).openConnection(proxy);
+
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -28,7 +30,7 @@ public class ProxyConnection {
 
     }
 
-    public URLConnection getConnection() {
+    public HttpURLConnection getConnection() {
         return conn;
     }
 
